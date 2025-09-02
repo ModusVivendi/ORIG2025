@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
-import org.firstinspires.ftc.teamcode.IntoDeep_SM.TeleOp.RRTeleOp_Init;
+import org.firstinspires.ftc.teamcode.old_TeleOp.RRTeleOp_Init;
 import org.firstinspires.ftc.teamcode.config.RobotConfig;
 import org.firstinspires.ftc.teamcode.config.HardwareConfig;
 
