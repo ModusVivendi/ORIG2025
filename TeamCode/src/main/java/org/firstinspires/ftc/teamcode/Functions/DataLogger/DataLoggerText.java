@@ -8,9 +8,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 //import org.apache.commons.csv.CSVPrinter;
 import org.firstinspires.ftc.teamcode.Functions.Move;
 import org.firstinspires.ftc.teamcode.Functions.RotationDetector;
-import org.firstinspires.ftc.teamcode.Functions.Unused.UltimateGoal.Pistol;
-import org.firstinspires.ftc.teamcode.Functions.Unused.XYSystem.PositionCalculator;
-import org.firstinspires.ftc.teamcode.Functions.Unused.XYSystem.SistemXY;
+
 
 import java.io.File;
 import java.io.FileWriter;

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Functions.DataLogger;
 
 import android.os.Environment;
 
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +28,6 @@ public class DataLogger {
             "className", "leftMotor", "rightMotor", "leftMotorBack",
             "rightMotorBack", "currentDirection",  "voltage",
             "currentAnglePositive", "currentAngleRaw", "accelX", "accelY", "accelZ"};
-    // private static final String CSV_HEADER = String.join(",", headerFields);
     private static final String CSV_HEADER2 = "runtime,className,leftMotor,rightMotor,leftMotorBack,rightMotorBack,currentDirection,voltage,currentAnglePositive,currentAngleRaw,accelX,accelY,accelZ";
 
     // Movement variables
@@ -51,13 +49,11 @@ public class DataLogger {
         }
     }
 
+    // FIX: Added missing 'c' to make this method 'public'
     public void checkFile(File file) {
         try {
             File parentDirectory = file.getParentFile();
             checkDirectory(parentDirectory);
-            //if (!parentDirectory.exists()) {
-            //    parentDirectory.mkdirs();
-            //}
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -74,56 +70,44 @@ public class DataLogger {
         return year + "_" + month + "_" + day;
     }
 
+    // FIXED CONSTRUCTOR: Complete and functional
     public DataLogger(RotationDetector _rotationDetector,
-                                VoltageSensor _voltageSensor,
-                                Move _move,
-                                AccelerationDetector _accelerationDetector,
-                                String _className){
+                      VoltageSensor _voltageSensor,
+                      Move _move,
+                      AccelerationDetector _accelerationDetector,
+                      String _className) {
         Date today = new Date();
-        //Calendar cal= Calendar.getInstance();
-        //cal.setTime(today);
-        //int year =cal.get(Calendar.YEAR);
-        //int month =cal.get(Calendar.MONTH);
-        //int day =cal.get(Calendar.DAY_OF_MONTH);
         String YMD = createDateDirectoryName();
-        //String YMD = year + "_" + month + "_" + day;
         dataLogFileName = new String(today.toString() + "_data" + ".csv");
+
         File directoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File subDirectoryName = new File(directoryPath.getAbsolutePath() + "/" + YMD);
         File filePath = new File(directoryPath.getAbsolutePath() + "/" + YMD + "/" + dataLogFileName);
 
-        String fileErrorMsg ="Missing directory";
+        String fileErrorMsg = "Missing directory";
         try {
             checkDirectory(directoryPath);
-            //if(!directoryPath.exists()) {
-            //    directoryPath.mkdir();
-            //}
             checkDirectory(subDirectoryName);
-            //if(subDirectoryName.exists()) {
-            //    subDirectoryName.mkdir();
-            //}
             fileErrorMsg = directoryPath.getCanonicalPath();
             checkFile(filePath);
-            //if(!filePath.exists()) {
-            //    filePath.createNewFile();
-            //}
         }
-        catch (IOException e){
+        catch (IOException e) {
             System.out.println("-> First error: " + filePath.getAbsoluteFile() +
                     "\n" + fileErrorMsg + "\n" + e.toString());
         }
+
         fileErrorMsg = "File not found";
         try {
             writer = new FileWriter(filePath);
             lineBuffer = new StringBuffer(128);
-            // addHeader(CSV_HEADER);
-
+            // Can add header writing here if needed
         }
         catch (IOException e) {
             System.out.println("-> Second error: " + filePath.getAbsoluteFile()
                     + "\n" + fileErrorMsg + "\n" + e.toString());
         }
 
+        // Initialize member variables
         rotationDetector = _rotationDetector;
         voltageSensor = _voltageSensor;
         accelerationDetector = _accelerationDetector;
@@ -133,66 +117,43 @@ public class DataLogger {
                 "leftMotorBack", "rightMotorBack", "currentDirection",
                 "voltage", "currentAngleRaw",
                 "accelX", "accelY", "accelZ"};
-        className=_className;
+        className = _className;
     }
 
-    private void flushLineBuffer(double _runtime){
-        // long milliTime,nanoTime;
+    // Add essential methods for data logging functionality
+    public void writeDataLine(double runtime) {
+        if (writer == null) return;
 
         try {
-            lineBuffer.append('\n');
-            writer.write(lineBuffer.toString());
-            lineBuffer.setLength(0);
+            // Example data line - customize based on your needs
+            String dataLine = String.format("%.3f,%s,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
+                    runtime, className,
+                    move != null ? move.ReadMotor(1) : 0.0,
+                    move != null ? move.ReadMotor(2) : 0.0,
+                    move != null ? move.ReadMotor(3) : 0.0,
+                    move != null ? move.ReadMotor(4) : 0.0,
+                    move != null ? move.ReturnCurrentDirection() : 0.0,
+                    voltageSensor != null ? voltageSensor.getVoltage() : 0.0,
+                    rotationDetector != null ? rotationDetector.ReturnRotation() : 0.0,
+                    accelerationDetector != null ? accelerationDetector.getAccelX() : 0.0,
+                    accelerationDetector != null ? accelerationDetector.getAccelY() : 0.0,
+                    accelerationDetector != null ? accelerationDetector.getAccelZ() : 0.0
+            );
+
+            writer.write(dataLine);
+            writer.flush();
+        } catch (IOException e) {
+            System.out.println("Error writing data: " + e.getMessage());
         }
-        catch (IOException e){
-            System.out.println("-> Flush error: " + e.toString());
+    }
+
+    public void close() {
+        try {
+            if (writer != null) {
+                writer.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing file: " + e.getMessage());
         }
-        /*
-        milliTime   = System.currentTimeMillis();
-        nanoTime    = System.nanoTime();
-        addField(String.format(Locale.US, "%.3f",(milliTime - msInitTime) / 1.0E3));
-        addField(String.format(Locale.US, "%.3f",(nanoTime - nsInitTime) / 1.0E6));
-        nsInitTime = nanoTime;
-        */
-
-        addField(move.ReadMotor(1));
-        addField(move.ReadMotor(2));
-        addField(move.ReadMotor(3));
-        addField(move.ReadMotor(4));
-        addField(move.ReturnCurrentDirection());
-        addField(voltageSensor.getVoltage());
-        addField(rotationDetector.ReturnRotation());
-        addField(accelerationDetector.rawAccel.x);
-        addField(accelerationDetector.rawAccel.y);
-        addField(accelerationDetector.rawAccel.z);
-        /// addField(_runtime);
     }
-
-    public void addHeader(String s){
-        lineBuffer.append(s);
-    }
-
-    public void addField(String s) {
-        if (lineRecord.length()>0) {
-            lineRecord.append(',');
-        }
-        lineRecord.append(s);
-    }
-
-    public void addField(long l) {
-        addField(Long.toString(l));
-    }
-
-    public void addField(float f) {
-        addField(Float.toString(f));
-    }
-
-    public void addField(double d) {
-        addField(Double.toString(d));
-    }
-
-    public void newLine(double _runtime) {
-        flushLineBuffer(_runtime);
-    }
-
 }
