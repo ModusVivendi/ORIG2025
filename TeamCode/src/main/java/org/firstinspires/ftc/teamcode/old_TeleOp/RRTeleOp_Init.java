@@ -22,6 +22,8 @@ import org.firstinspires.ftc.teamcode.Functions.ColorSensorV3;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.advanced.PoseStorage;
 
+import java.util.Locale;
+
 @TeleOp(name="RRTeleOpIntoDeep_Init", group = "IntoDeep_SM")
 @Disabled
 public class RRTeleOp_Init extends LinearOpMode {
@@ -1080,7 +1082,7 @@ public class RRTeleOp_Init extends LinearOpMode {
 
             telemetry.addData("Left Servo", vertClawRotateLeft.getPosition());
             telemetry.addData("Right Servo", vertClawRotateRight.getPosition());
-            telemetry.addData("Time", String.format("%.1f", currentTime));
+            telemetry.addData("Time", String.format(Locale.US,"%.1f", currentTime));
             telemetry.update();
         }
     }

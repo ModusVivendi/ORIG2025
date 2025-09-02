@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
+import java.util.Locale;
+
 /**
  * Data structure for PID controller coefficients
  */
@@ -20,6 +22,6 @@ public class PIDCoefficients {
 
     @Override
     public String toString() {
-        return String.format("PIDCoefficients (kP=%.3f, kI=%.3f, kD=%.3f)", kP, kI, kD);
+        return String.format(Locale.US,"PIDCoefficients (kP=%.3f, kI=%.3f, kD=%.3f)", kP, kI, kD);
     }
 }

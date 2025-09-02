@@ -58,11 +58,15 @@ public class ColorSensorClass extends LinearOpMode {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
 
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+        // //get a reference to the RelativeLayout so we can change the background
+        // // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        // int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        // final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
+        // Replace "RelativeLayout" with the actual ID from the FTC app
+        // You'll need to find what the actual resource ID is called
+        int relativeLayoutId = android.R.id.content; // or the specific FTC layout ID
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
 
         // wait for the start button to be pressed.

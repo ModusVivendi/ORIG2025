@@ -45,7 +45,7 @@ dependencies {
     }
 
     // Standard dependencies
-    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
 
     // Explicitly declare Kotlin stdlib to match FTC SDK

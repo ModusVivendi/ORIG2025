@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
-        classpath 'com.android.tools.build:gradle:8.12.2'
+        classpath 'com.android.tools.build:gradle:8.7.0'
     }
 }
 
@@ -21,6 +21,14 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.25'
+            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25'
+            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25'
+        }
     }
 }
 

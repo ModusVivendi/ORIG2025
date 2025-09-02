@@ -4,6 +4,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
+import java.util.Locale;
 
 public class ColorSensorV3 {
     private ColorSensor colorSensor;
@@ -201,12 +202,12 @@ public class ColorSensorV3 {
         // HSV values
         info.append("HSV:[")
                 .append((int)hsv[0]).append(',')
-                .append(String.format("%.2f", hsv[1])).append(',')
-                .append(String.format("%.2f", hsv[2])).append("] ");
+                .append(String.format(Locale.US, "%.2f", hsv[1])).append(',')
+                .append(String.format(Locale.US, "%.2f", hsv[2])).append("] ");
 
         // Distance
         info.append("Dist:")
-                .append(String.format("%.2f", getDistance()));
+                .append(String.format(Locale.US, "%.2f", getDistance()));
 
         return info.toString();
     }

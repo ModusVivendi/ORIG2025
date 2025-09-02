@@ -29,11 +29,20 @@ android {
     }
 }
 
+//// Java toolchain configuration
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(8)
+//    }
+//}
+
 dependencies {
     implementation project(':FtcRobotController')
+
     implementation('org.openftc:easyopencv:1.7.3') {
         exclude group: 'org.jetbrains.kotlin'
     }
+
     implementation('org.ftclib.ftclib:core:2.1.1') {
         exclude group: 'org.jetbrains.kotlin'
     }

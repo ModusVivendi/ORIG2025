@@ -32,6 +32,8 @@ import org.firstinspires.ftc.teamcode.controllers.PIDCoefficients;
 import org.firstinspires.ftc.teamcode.controllers.PIDController;
 import org.firstinspires.ftc.teamcode.controllers.PIDFController;
 
+import java.util.Locale;
+
 @TeleOp(name="RRTeleOpIntoDeep", group = "IntoDeep")
 public class RRTeleOp extends LinearOpMode {
     // Load motor config
@@ -1261,7 +1263,7 @@ public class RRTeleOp extends LinearOpMode {
         }
 
         telemetry.addData("Gripper State", vertGripperState);
-        telemetry.addData("Grip Position", String.format("%.2f", currentGripPosition));
+        telemetry.addData("Grip Position", String.format(Locale.US, "%.2f", currentGripPosition));
     }
 
 
@@ -1368,7 +1370,7 @@ public class RRTeleOp extends LinearOpMode {
         }
 
         telemetry.addData("Gripper State", vertGripperState);
-        telemetry.addData("Grip Position", String.format("%.2f", currentGripPosition));
+        telemetry.addData("Grip Position", String.format(Locale.US, "%.2f", currentGripPosition));
     }
 
 
@@ -1518,7 +1520,7 @@ public class RRTeleOp extends LinearOpMode {
                     currentGripPosition = newGripPosition;
 
                     telemetry.addData("Gripper", "Opening");
-                    telemetry.addData("Position", String.format("%.2f", currentGripPosition));
+                    telemetry.addData("Position", String.format(Locale.US, "%.2f", currentGripPosition));
                 }
 
 
@@ -1581,7 +1583,7 @@ public class RRTeleOp extends LinearOpMode {
                     currentGripPosition = newClosePosition;
 
                     telemetry.addData("Gripper", "Closing");
-                    telemetry.addData("Position", String.format("%.2f", currentGripPosition));
+                    telemetry.addData("Position", String.format(Locale.US, "%.2f", currentGripPosition));
                 }
 
 //                vertClawGripper.setPosition(CLAW_CLOSED);
@@ -1777,7 +1779,7 @@ public class RRTeleOp extends LinearOpMode {
 
             telemetry.addData("Left Servo", vertClawRotateLeft.getPosition());
             telemetry.addData("Right Servo", vertClawRotateRight.getPosition());
-            telemetry.addData("Time", String.format("%.1f", currentTime));
+            telemetry.addData("Time", String.format(Locale.US, "%.1f", currentTime));
             telemetry.update();
         }
     }
