@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.teleop;
 
+import org.firstinspires.ftc.teamcode.config.RobotBuilds;
 import org.firstinspires.ftc.teamcode.config.RobotConfig;
 import org.firstinspires.ftc.teamcode.config.HardwareConfig;
+import org.firstinspires.ftc.teamcode.config.FieldConfig;
+import org.firstinspires.ftc.teamcode.config.SystemConfiguration;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -9,12 +12,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-//import com.qualcomm.robotcore.hardware.DcMotorEx.CurrentUnit;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Functions.ArmEncoder;  //?
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Functions.GamepadCalc;
 import org.firstinspires.ftc.teamcode.Functions.ColorSensorV3;
@@ -32,6 +33,9 @@ import java.util.Locale;
 
 @TeleOp(name = "ORIG2025", group = "ORIG2025")
 public class ORIG_TeleOp extends LinearOpMode {
+
+    private SystemConfiguration activeConfig = null;
+
     // Load motor config
     private RobotConfig config;
 
@@ -188,7 +192,6 @@ public class ORIG_TeleOp extends LinearOpMode {
     private double movement;
 
     // Initialize controller classes
-    private ArmEncoder controller;
     private SampleMecanumDrive drive;
     private GamepadCalc gamepadCalc;
 
@@ -324,6 +327,9 @@ public class ORIG_TeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         int tickAdjustment = 100;
 
+        // Choose your robot build here
+        activeConfig = RobotBuilds.COMPETITION_ROBOT;
+
         // Initialize hardware
         initializeHardware();
 
@@ -406,7 +412,9 @@ public class ORIG_TeleOp extends LinearOpMode {
     }
 
     private void initializeHardware() {
-        config = new RobotConfig(hardwareMap);
+
+        // Initialize RobotConfig with both required arguments
+        config = new RobotConfig(hardwareMap, activeConfig);
 
         // Initialize drive motors
         leftMotor = config.getMotorIfEnabled("FL", HardwareConfig.DrivetrainConfig.ENABLE_FL);
@@ -439,10 +447,6 @@ public class ORIG_TeleOp extends LinearOpMode {
         isClawAtLeftLimit = false;
         isClawAtRightLimit = false;
 
-        // Initialize controller classes
-        if (armMotorLeft != null && armMotorRight != null) {
-            controller = new ArmEncoder(armMotorLeft, armMotorRight);
-        }
         drive = new SampleMecanumDrive(hardwareMap);
         gamepadCalc = new GamepadCalc(gamepad1, gamepad2, this);
 

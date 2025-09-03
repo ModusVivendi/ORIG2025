@@ -8,14 +8,17 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.slides.VerticalSlides;
 import org.firstinspires.ftc.teamcode.config.RobotConfig;
 import org.firstinspires.ftc.teamcode.config.FieldConfig;
+import org.firstinspires.ftc.teamcode.config.SystemConfiguration;
+import org.firstinspires.ftc.teamcode.config.RobotBuilds;
 
 @TeleOp(name = "Main TeleOp", group = "ORIG")
 //@Disabled
 public class MainTeleOp extends LinearOpMode {
     //Subsystems
-    private MecanumDrive drive;
-    private VerticalSlides slides;
-    private RobotConfig robotConfig;
+    private MecanumDrive drive = null;
+    private VerticalSlides slides = null;
+    private RobotConfig robotConfig = null;
+    private SystemConfiguration activeConfig = null;
 
     // Control variables
     private double targetHeading = 0.0;
@@ -26,6 +29,9 @@ public class MainTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        // Choose your robot build here
+        activeConfig = RobotBuilds.COMPETITION_ROBOT;
 
         // Initialize hardware
         initializeHardware();
@@ -52,8 +58,10 @@ public class MainTeleOp extends LinearOpMode {
             // Slide control
             handleSlideControl();
 
-            // Update subsystems
-            slides.update();
+            // Update subsystems, but only if they are enabled
+            if (slides != null) {
+                slides.update();
+            }
 
             // Telemetry
             updateTelemetry();
@@ -71,9 +79,13 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.update();
 
         try {
-            robotConfig = new RobotConfig(hardwareMap);
-            drive = new MecanumDrive(robotConfig);
-            slides = new VerticalSlides(robotConfig);
+            robotConfig = new RobotConfig(hardwareMap, activeConfig);
+            if (activeConfig.enableDrivetrain) {
+                drive = new MecanumDrive(robotConfig);
+            }
+            if (activeConfig.enableVerticalSlides) {
+                slides = new VerticalSlides(robotConfig);
+            }
 
             telemetry.addLine("✓ Hardware initialized successfully");
         } catch (Exception e) {
@@ -104,52 +116,56 @@ public class MainTeleOp extends LinearOpMode {
      * Handle drive control from gamepad1
      */
     private void handleDriveControl() {
-        // Get current heading (replace with actual IMU reading)
-        double currentHeading = 0.0; // TODO: Get from IMU
+        if (drive != null) {
+            // Get current heading (replace with actual IMU reading)
+            double currentHeading = 0.0; // TODO: Get from IMU
 
-        // Drive inputs
-        double forward = -gamepad1.left_stick_y;  // Negative because Y is inverted
-        double strafe = gamepad1.left_stick_x;
+            // Drive inputs
+            double forward = -gamepad1.left_stick_y;  // Negative because Y is inverted
+            double strafe = gamepad1.left_stick_x;
 
-        // Heading control - update target with right stick
-        if (Math.abs(gamepad1.right_stick_x) > 0.1) {
-            targetHeading += gamepad1.right_stick_x * 0.05; // Adjust sensitivity as needed
+            // Heading control - update target with right stick
+            if (Math.abs(gamepad1.right_stick_x) > 0.1) {
+                targetHeading += gamepad1.right_stick_x * 0.05; // Adjust sensitivity as needed
+            }
+
+            // Reset heading with right bumper
+            if (gamepad1.right_bumper) {
+                targetHeading = currentHeading; // Maintain current heading
+            }
+
+            // Apply drive commands
+            drive.driveFieldCentric(forward, strafe, targetHeading, currentHeading);
         }
-
-        // Reset heading with right bumper
-        if (gamepad1.right_bumper) {
-            targetHeading = currentHeading; // Maintain current heading
-        }
-
-        // Apply drive commands
-        drive.driveFieldCentric(forward, strafe, targetHeading, currentHeading);
     }
 
     /**
      * Handle slide control from gamepad2
      */
     private void handleSlideControl() {
-        // Preset heights using D-pad
-        if (gamepad2.dpad_up) {
-            slides.setHeight(FieldConfig.JUNCTION_HEIGHT_HIGH_MM, 1000);  // High junction
-            telemetry.addLine("→ Moving to HIGH junction");
-        } else if (gamepad2.dpad_right) {
-            slides.setHeight(FieldConfig.JUNCTION_HEIGHT_MEDIUM_MM, 800); // Medium junction
-            telemetry.addLine("→ Moving to MEDIUM junction");
-        } else if (gamepad2.dpad_down) {
-            slides.setHeight(FieldConfig.JUNCTION_HEIGHT_LOW_MM, 600);    // Low junction
-            telemetry.addLine("→ Moving to LOW junction");
-        } else if (gamepad2.dpad_left) {
-            slides.setHeight(FieldConfig.JUNCTION_HEIGHT_GROUND_MM, 400); // Ground level
-            telemetry.addLine("→ Moving to GROUND level");
-        }
+        if (slides != null) {
+            // Preset heights using D-pad
+            if (gamepad2.dpad_up) {
+                slides.setHeight(FieldConfig.JUNCTION_HEIGHT_HIGH_MM, 1000);  // High junction
+                telemetry.addLine("→ Moving to HIGH junction");
+            } else if (gamepad2.dpad_right) {
+                slides.setHeight(FieldConfig.JUNCTION_HEIGHT_MEDIUM_MM, 800); // Medium junction
+                telemetry.addLine("→ Moving to MEDIUM junction");
+            } else if (gamepad2.dpad_down) {
+                slides.setHeight(FieldConfig.JUNCTION_HEIGHT_LOW_MM, 600);    // Low junction
+                telemetry.addLine("→ Moving to LOW level");
+            } else if (gamepad2.dpad_left) {
+                slides.setHeight(FieldConfig.JUNCTION_HEIGHT_GROUND_MM, 400); // Ground level
+                telemetry.addLine("→ Moving to GROUND level");
+            }
 
-        // Manual slide control with left stick Y
-        if (Math.abs(gamepad2.left_stick_y) > 0.1) {
-            double currentHeight = slides.getCurrentHeight();
-            double adjustment = -gamepad2.left_stick_y * 5.0; // 5mm per update
-            double newHeight = currentHeight + adjustment;
-            slides.setHeight(newHeight, 500);
+            // Manual slide control with left stick Y
+            if (Math.abs(gamepad2.left_stick_y) > 0.1) {
+                double currentHeight = slides.getCurrentHeight();
+                double adjustment = -gamepad2.left_stick_y * 5.0; // 5mm per update
+                double newHeight = currentHeight + adjustment;
+                slides.setHeight(newHeight, 500);
+            }
         }
     }
 
@@ -163,20 +179,28 @@ public class MainTeleOp extends LinearOpMode {
 
         // Drive status
         telemetry.addLine("--- DRIVE ---");
-        telemetry.addData("Target Heading", "%.1f°", Math.toDegrees(targetHeading));
-        telemetry.addData("Current Heading", "%.1f°", 0.0); // TODO: Add actual IMU reading
+        if (drive != null) {
+            telemetry.addData("Target Heading", "%.1f°", Math.toDegrees(targetHeading));
+            telemetry.addData("Current Heading", "%.1f°", 0.0); // TODO: Add actual IMU reading
+        } else {
+            telemetry.addData("Drivetrain", "DISABLED");
+        }
         telemetry.addLine("");
 
         // Slide status
         telemetry.addLine("--- SLIDES ---");
-        telemetry.addData("Current Height", "%.1f mm", slides.getCurrentHeight());
-        telemetry.addData("At Target", slides.isAtTarget(5.0) ? "YES" : "NO");
+        if (slides != null) {
+            telemetry.addData("Current Height", "%.1f mm", slides.getCurrentHeight());
+            telemetry.addData("At Target", slides.isAtTarget(5.0) ? "YES" : "NO");
+        } else {
+            telemetry.addData("Slides", "DISABLED");
+        }
         telemetry.addLine("");
 
         // Controls help
         telemetry.addLine("--- CONTROLS ---");
-        telemetry.addLine("GP1: Left stick = drive, Right stick = turn");
-        telemetry.addLine("GP2: D-pad = slide presets, Left stick Y = manual");
+        telemetry.addLine("GamePad 1: Left stick = drive, Right stick = turn");
+        telemetry.addLine("GamePad 2: D-pad = slide presets, Left stick Y = manual");
 
         telemetry.update();
     }

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.config;
 
 public class HardwareConfig {
+
+    // Drivetrain configuration
     public static class DrivetrainConfig {
         // Enable flags
         public static final boolean ENABLE_FL = true;
