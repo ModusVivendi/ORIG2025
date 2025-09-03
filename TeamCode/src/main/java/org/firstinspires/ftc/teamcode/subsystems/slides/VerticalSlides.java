@@ -21,14 +21,17 @@ public class VerticalSlides {
             (Math.PI * VerticalSlideConfig.SPOOL_DIAMETER_MM);
 
     public VerticalSlides(RobotConfig config) {
-        leftSlide = config.getMotorExIfEnabled(
+        // The getSlideMotor method now internally checks if the slides are enabled
+        leftSlide = config.getSlideMotor(
                 VerticalSlideConfig.LEFT_NAME,
-                VerticalSlideConfig.ENABLE_LEFT
+                true, // isVertical is true for vertical slides
+                VerticalSlideConfig.LEFT_REVERSE
         );
 
-        rightSlide = config.getMotorExIfEnabled(
+        rightSlide = config.getSlideMotor(
                 VerticalSlideConfig.RIGHT_NAME,
-                VerticalSlideConfig.ENABLE_RIGHT
+                true, // isVertical is true for vertical slides
+                VerticalSlideConfig.RIGHT_REVERSE
         );
 
         // Initialize PIDF controller
@@ -47,6 +50,8 @@ public class VerticalSlides {
     }
 
     public void setHeight(double heightMM, double velocity) {
+        if (leftSlide == null || rightSlide == null) return;
+
         targetHeight = Math.min(Math.max(heightMM,
                         VerticalSlideConfig.MIN_HEIGHT_MM),
                 VerticalSlideConfig.MAX_HEIGHT_MM
@@ -80,6 +85,7 @@ public class VerticalSlides {
     }
 
     public boolean isAtTarget(double tolerance) {
+        if (leftSlide == null || rightSlide == null) return true;
         return slideController.atTargetPosition(tolerance);
     }
 

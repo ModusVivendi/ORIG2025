@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.config;
 
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.Functions.ColorSensorV3;
+import static org.firstinspires.ftc.teamcode.config.RobotBuilds.*;
 
 public class RobotConfig {
     private final HardwareMap hardwareMap;
@@ -12,7 +13,7 @@ public class RobotConfig {
             throw new IllegalArgumentException("HardwareMap cannot be null");
         }
         this.hardwareMap = hardwareMap;
-        this.configuration = configuration;
+        this.configuration = DRIVE_ONLY_ROBOT;
     }
 
     // Generic hardware getters with error handling

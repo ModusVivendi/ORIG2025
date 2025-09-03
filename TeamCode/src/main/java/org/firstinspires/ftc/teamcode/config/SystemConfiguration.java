@@ -4,6 +4,8 @@ public class SystemConfiguration {
     public boolean enableDrivetrain;
     public boolean enableVerticalSlides;
     public boolean enableHorizontalSlides;
+    public boolean enableVerticalClaw;
+    public boolean enableHorizontalClaw;
     public boolean enableImuSensor;
     public boolean enableColorSensors;
     public boolean enableDistanceSensors;
@@ -12,12 +14,16 @@ public class SystemConfiguration {
             boolean enableDrivetrain,
             boolean enableVerticalSlides,
             boolean enableHorizontalSlides,
+            boolean enableVerticalClaw,
+            boolean enableHorizontalClaw,
             boolean enableImuSensor,
             boolean enableColorSensors,
             boolean enableDistanceSensors) {
         this.enableDrivetrain = enableDrivetrain;
         this.enableVerticalSlides = enableVerticalSlides;
         this.enableHorizontalSlides = enableHorizontalSlides;
+        this.enableVerticalClaw = enableVerticalClaw;
+        this.enableHorizontalClaw = enableHorizontalClaw;
         this.enableImuSensor = enableImuSensor;
         this.enableColorSensors = enableColorSensors;
         this.enableDistanceSensors = enableDistanceSensors;

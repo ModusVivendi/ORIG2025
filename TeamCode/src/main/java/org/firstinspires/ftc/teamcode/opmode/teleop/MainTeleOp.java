@@ -31,7 +31,7 @@ public class MainTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         // Choose your robot build here
-        activeConfig = RobotBuilds.COMPETITION_ROBOT;
+        activeConfig = RobotBuilds.DRIVE_ONLY_ROBOT;
 
         // Initialize hardware
         initializeHardware();

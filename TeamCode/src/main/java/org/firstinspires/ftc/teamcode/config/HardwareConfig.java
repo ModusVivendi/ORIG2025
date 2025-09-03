@@ -37,6 +37,9 @@ public class HardwareConfig {
         public static final String LEFT_NAME = "vertSlideLeft";
         public static final String RIGHT_NAME = "vertSlideRight";
 
+        public static final boolean LEFT_REVERSE = true;
+        public static final boolean RIGHT_REVERSE = false;
+
         // Motor specifications
         public static final double TICKS_PER_REV = 537.7;  // GoBilda Yellow Jacket
         public static final double MAX_RPM = 312;

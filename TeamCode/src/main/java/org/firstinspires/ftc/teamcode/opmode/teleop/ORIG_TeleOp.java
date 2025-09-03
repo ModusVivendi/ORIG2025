@@ -328,7 +328,7 @@ public class ORIG_TeleOp extends LinearOpMode {
         int tickAdjustment = 100;
 
         // Choose your robot build here
-        activeConfig = RobotBuilds.COMPETITION_ROBOT;
+        activeConfig = RobotBuilds.FULL_ROBOT;
 
         // Initialize hardware
         initializeHardware();

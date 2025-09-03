@@ -16,25 +16,21 @@ public class MecanumDrive {
     public MecanumDrive(RobotConfig config) {
         frontLeft = config.getDriveMotor(
                 DrivetrainConfig.FL_NAME,
-                DrivetrainConfig.ENABLE_FL,
                 DrivetrainConfig.FL_REVERSE
         );
 
         frontRight = config.getDriveMotor(
                 DrivetrainConfig.FR_NAME,
-                DrivetrainConfig.ENABLE_FR,
                 DrivetrainConfig.FR_REVERSE
         );
 
         backLeft = config.getDriveMotor(
                 DrivetrainConfig.BL_NAME,
-                DrivetrainConfig.ENABLE_BL,
                 DrivetrainConfig.BL_REVERSE
         );
 
         backRight = config.getDriveMotor(
                 DrivetrainConfig.BR_NAME,
-                DrivetrainConfig.ENABLE_BR,
                 DrivetrainConfig.BR_REVERSE
         );
 
@@ -45,7 +41,13 @@ public class MecanumDrive {
     }
 
     public void driveFieldCentric(double drive, double strafe, double targetHeading, double currentHeading) {
-        // Calculate heading correction using PID
+		
+		if (frontLeft == null || frontRight == null || backLeft == null || backRight == null) {
+            // Drivetrain is disabled, do nothing
+            return;
+        }
+        
+		// Calculate heading correction using PID
         headingController.setTargetPosition(targetHeading);
         double headingCorrection = headingController.update(currentHeading);
 
