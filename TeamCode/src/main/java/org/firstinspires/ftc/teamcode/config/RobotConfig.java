@@ -32,6 +32,11 @@ public class RobotConfig {
     public DcMotorEx getMotorExIfEnabled(String name, boolean isEnabled) {
         if (!isEnabled) return null;
         try {
+            // Check if the motor exists first
+            if (!hardwareMap.dcMotor.contains(name)) {
+                throw new RuntimeException("Motor '" + name + "' not found in hardware map. Available motors: " +
+                        hardwareMap.dcMotor.entrySet().toString());
+            }
             return hardwareMap.get(DcMotorEx.class, name);
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize motorEx: " + name, e);

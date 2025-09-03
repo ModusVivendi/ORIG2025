@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
-@TeleOp(name="Localizer Diagnostic", group = "drive")
+@TeleOp(name="Localizer Diagnostic", group = "Testing")
 public class LocalizerDiagnostic extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Config
 //@Disabled
-@TeleOp(group = "drive")
+@TeleOp(name="Motor Direction Debugger", group = "RR_Drive")
 public class MotorDirectionDebugger extends LinearOpMode {
     public static double MOTOR_POWER = 0.7;
 
